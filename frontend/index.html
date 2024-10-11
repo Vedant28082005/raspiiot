@@ -62,7 +62,7 @@
       // Mock API function to simulate real API fetch
       async function fetchSensorData() {
         // Simulated API response
-        const response = await fetch("http://localhost:8000/api/sensorData"); // Replace with your actual API URL
+        const response = await fetch("https://raspiiot.onrender.com/api/sensorData"); // Replace with your actual API URL
         const data = await response.json();
         return data;
       }

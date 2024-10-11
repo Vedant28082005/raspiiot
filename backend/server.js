@@ -8,7 +8,7 @@ const app = express();
 
 
 const corsOptions = {
-    origin: 'http://127.0.0.1:5500',
+    origin: 'https://raspiiot.vercel.app',
     method: "GET, POST, PUT, PATCH, DELETE",
     Credentials: true,
     allowedHeaders: 'Content-Type, Authorization'
