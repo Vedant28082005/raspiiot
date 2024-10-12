@@ -1,20 +1,21 @@
 const express = require("express");
-const { SensorData } = require("./models/sensor-model.js")
+const { SensorData } = require("./models/sensor-model.js");
 const mongoose = require("mongoose");
-const connectDb = require("./db.js")
+const connectDb = require("./db.js");
 const cors = require('cors');
 
 const app = express();
 
-
+// CORS options
 const corsOptions = {
     origin: 'https://raspiiot.vercel.app',
-    method: "GET, POST, PUT, PATCH, DELETE",
-    Credentials: true,
+    methods: "GET, POST, PUT, PATCH, DELETE", // Should be 'methods' not 'method'
+    credentials: true,  // 'credentials' is lowercase
     allowedHeaders: 'Content-Type, Authorization'
-}
+};
 app.use(cors(corsOptions));
 
+// Root route
 app.get("/", (req, res) => {
     return res.send('Hello From Home Page');
 });
@@ -32,30 +33,35 @@ app.get('/sensor', async (req, res) => {
         if (!temperature || !humidity) {
             return res.status(400).send("Temperature and humidity parameters are required.");
         }
+        
         // Save the data to the database
-        const dataCreated = await SensorData.create({ temperature: temperature, humidity: humidity })
-
+        const dataCreated = await SensorData.create({ temperature, humidity });
         console.log("Sensor data saved successfully:", dataCreated);
-        return res.send(`Data uploaded Successfully! Temperature: ${temperature}, Humidity: ${humidity}`);
+        return res.send(`Data uploaded successfully! Temperature: ${temperature}, Humidity: ${humidity}`);
     } catch (error) {
         console.error("Error saving sensor data:", error);
         return res.status(500).send("Failed to upload data. Please try again later.");
     }
 });
 
+// Route to fetch sensor data
 app.get("/api/sensorData", async (req, res) => {
     try {
         const sensorDatas = await SensorData.find();
-        res.json(sensorDatas);
+        return res.json(sensorDatas);
     } catch (error) {
-        console.log('Error  fetching sensor data:', error);
+        console.log('Error fetching sensor data:', error);
+        return res.status(500).send("Error fetching sensor data.");
     }
-})
+});
 
+// Connect to the database and start the server
 const port = 8000;
-app.listen(port, () => {
-    console.log(`Server Started on port ${port} 🥸`);
-    setTimeout(() => {
-        connectDb();
-    }, 2000);
+
+connectDb().then(() => {
+    app.listen(port, () => {
+        console.log(`Server started on port ${port} 🥸`);
+    });
+}).catch((error) => {
+    console.error("Failed to connect to the database. Server not started.", error);
 });
