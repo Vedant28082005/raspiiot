@@ -54,6 +54,8 @@ app.get("/api/sensorData", async (req, res) => {
 
 const port = 8000;
 app.listen(port, () => {
-    console.log(`Server Started on port ${port}`);
-    connectDb();
+    console.log(`Server Started on port ${port} 🥸`);
+    setTimeout(() => {
+        connectDb();
+    }, 2000);
 });

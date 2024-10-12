@@ -6,11 +6,18 @@ const mongoDBUrl = process.env.MONGO_URI;
 
 const connectDb = async () => {
     try {
-        await mongoose.connect(mongoDBUrl);
-        console.log("Database connection successful 🎊");
-
+        console.log(`Please wait trying to contact Mongo Database.. 😁`);
+        setTimeout(async () => {
+            await mongoose.connect(mongoDBUrl);
+            console.log("Database connection successful 🎊");
+        }, 2000);
     } catch (error) {
-        console.log('Error connecting to the database');
+        console.log('Error connecting to the database 💀');
+    }
+    finally {
+        setTimeout(() => {
+            console.log(`Connection instance completed succeffuly. ~ Codebyviral ❤️`);
+        }, 5000);
     }
 }
 
